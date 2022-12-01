@@ -27,14 +27,16 @@ def analyze(request):
             if char not in punctuations:
                 analyzed = analyzed +char
 
-         params = {'purpose' : 'remove punctuation', 'analyzed_text' : analyzed}
+         params = {'purpose' : 'Remove Punctuation', 'analyzed_text' : analyzed}
          return render(request, 'analyze2.html', params)
+
+         
     elif(fullcaps == 'on'):
         analyzed = ""
         for char in djtext:
             analyzed = analyzed + char.upper()
 
-        params = {'purpose' : 'remove punctuation', 'analyzed_text' : analyzed}
+        params = {'purpose' : 'UPPERCASE', 'analyzed_text' : analyzed}
         return render(request, 'analyze2.html', params)
 
     elif(charcount =='on'):
@@ -42,10 +44,10 @@ def analyze(request):
         
         
 
-        params = {'purpose' : 'ccharacter count', 'analyzed_text' : analyzed}
+        params = {'purpose' : 'Character Count', 'analyzed_text' : analyzed}
         return render(request, 'analyze2.html', params)
 
-    elif(charcount=='on'):
+    elif(extraspaceremover=='on'):
         analyzed = ""
         for index, char in enumerate(djtext):
             if not(djtext[index] == " " and djtext[index+1] == " "):
@@ -60,7 +62,7 @@ def analyze(request):
             if char != "\n":
                 analyzed = analyzed + char
 
-        params = {'purpose' : 'New Line REmover', 'analyzed_text' : analyzed}
+        params = {'purpose' : 'New Line Remover', 'analyzed_text' : analyzed}
         return render(request, 'analyze2.html', params)
 
 
