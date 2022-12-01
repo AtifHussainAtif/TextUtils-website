@@ -15,6 +15,7 @@ def ex1(request):
 def analyze(request):
     djtext = request.GET.get('text', 'default')
     removepunc = request.GET.get('removepunc', 'off')
+    fullcaps = request.GET.get('fullcaps', 'off')
     print(djtext)
     print(removepunc)
     if removepunc == "on":
@@ -26,5 +27,13 @@ def analyze(request):
 
          params = {'purpose' : 'remove punctuation', 'analyzed_text' : analyzed}
          return render(request, 'analyze.html', params)
+    elif(fullcaps == 'on'):
+        analyzed = ""
+        for char in djtext:
+            analyzed = analyzed + char.upper()
+
+        params = {'purpose' : 'remove punctuation', 'analyzed_text' : analyzed}
+        return render(request, 'analyze.html', params)
+
     else:
         return HttpResponse("Error 404")
