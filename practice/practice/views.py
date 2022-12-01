@@ -27,4 +27,4 @@ def analyze(request):
          params = {'purpose' : 'remove punctuation', 'analyzed_text' : analyzed}
          return render(request, 'analyze.html', params)
     else:
-        return HttpResponse("Error")
+        return HttpResponse("Error 404")
