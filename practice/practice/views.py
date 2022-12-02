@@ -3,22 +3,14 @@ from django.shortcuts import render
 
 def index(request):
     return render(request, 'index2.html')
-
-def ex1(request):
-    sites = ['''<h1>For Entertainment </h1><a href = "https://www.youtube.com" >youtube video</a>''',
-             '''<h1>For Interaction </h1><a href = "https://www.facebook.com" >Facebook</a>''',
-             '''<h1>For Insight   </h1><a href = "https://www.ted.com/talks" >Ted Talk</a>''',
-             '''<h1>For Internship   </h1><a href="https://internshala.com" >Intenship</a>''',
-             ]
-    return HttpResponse((sites))
     
 def analyze(request):
-    djtext = request.GET.get('text', 'default')
-    removepunc = request.GET.get('removepunc', 'off')
-    fullcaps = request.GET.get('fullcaps', 'off')
-    newlineremover= request.GET.get('newlineremover', 'off')
-    extraspaceremover = request.GET.get('extraspaceremover', 'off')
-    charcount = request.GET.get('charcount', 'off')
+    djtext = request.POST.get('text', 'default')
+    removepunc = request.POST.get('removepunc', 'off')
+    fullcaps = request.POST.get('fullcaps', 'off')
+    newlineremover= request.POST.get('newlineremover', 'off')
+    extraspaceremover = request.POST.get('extraspaceremover', 'off')
+    charcount = request.POST.get('charcount', 'off')
 
     if removepunc == "on":
          punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
@@ -31,41 +23,36 @@ def analyze(request):
          return render(request, 'analyze2.html', params)
 
          
-    elif(fullcaps == 'on'):
+    if(fullcaps == 'on'):
         analyzed = ""
         for char in djtext:
             analyzed = analyzed + char.upper()
 
         params = {'purpose' : 'UPPERCASE', 'analyzed_text' : analyzed}
-        return render(request, 'analyze2.html', params)
+        djtext = analyzed
 
-    elif(charcount =='on'):
+    if(charcount =='on'):
         analyzed = len(djtext)
-        
-        
-
         params = {'purpose' : 'Character Count', 'analyzed_text' : analyzed}
-        return render(request, 'analyze2.html', params)
+        djtext = analyzed
 
-    elif(extraspaceremover=='on'):
+    if(extraspaceremover=='on'):
         analyzed = ""
         for index, char in enumerate(djtext):
             if not(djtext[index] == " " and djtext[index+1] == " "):
                analyzed = analyzed + char
-
         params = {'purpose' : 'extra space remover', 'analyzed_text' : analyzed}
-        return render(request, 'analyze2.html', params)
+        djtext = analyzed
 
-    elif(newlineremover=='on'):
+    if(newlineremover=='on'):
         analyzed = ""
         for char in djtext:
-            if char != "\n":
+            if char != "\n"and char!="\r":
                 analyzed = analyzed + char
 
         params = {'purpose' : 'New Line Remover', 'analyzed_text' : analyzed}
-        return render(request, 'analyze2.html', params)
+        djtext = analyzed
+    if(removepunc != "on" and newlineremover!="on" and extraspaceremover!="on" and fullcaps!="on"):
+        return HttpResponse("please select any operation and try again")
 
-
-
-    else:
-        return HttpResponse("Error 404")
+    return render(request, 'analyze2.html', params)
